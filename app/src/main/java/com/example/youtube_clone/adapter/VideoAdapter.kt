@@ -12,7 +12,7 @@ import com.example.youtube_clone.R
 import com.example.youtube_clone.model.VideoModel
 
 
-class VideoAdapter: androidx.recyclerview.widget.ListAdapter<VideoModel, VideoAdapter.ViewHolder>(diffUtil) {
+class VideoAdapter(val callback: (String, String) -> Unit): androidx.recyclerview.widget.ListAdapter<VideoModel, VideoAdapter.ViewHolder>(diffUtil) {
 
     inner class ViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
         fun bind(item: VideoModel) {
@@ -22,9 +22,14 @@ class VideoAdapter: androidx.recyclerview.widget.ListAdapter<VideoModel, VideoAd
 
             titleTextView.text = item.title
             subtitleTextView.text = item.subtitle
+
             Glide.with(thumbnailImageView.context)
                 .load(item.thumb)
                 .into(thumbnailImageView)
+
+            view.setOnClickListener {
+                callback(item.sources, item.title)
+            }
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
